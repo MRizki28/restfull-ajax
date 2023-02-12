@@ -12,5 +12,4 @@ class BarangModel extends Model
     protected $fillable = [
         'id' , 'nama','harga'
     ];
-    
 }
