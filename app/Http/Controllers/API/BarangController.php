@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BarangModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
@@ -13,9 +14,18 @@ class BarangController extends Controller
     public function index()
     {
         $barang = BarangModel::all();
+        $data = [];
+        foreach($barang as $b){
+            $data[] = [
+                'id' => Hash::make($b->id),
+                'nama' => $b->nama,
+                'harga' => $b->harga
+                // ... informasi lain tentang barang
+            ];
+        }
         return response()->json([
             'message' => 'Sukses Tampilkan Data Barang',
-            'data' => $barang
+            'data' => $data
         ],Response::HTTP_OK);
     }
 
