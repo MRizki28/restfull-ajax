@@ -26,5 +26,11 @@ php artisan migrate
 ```
 
 
+how to start serve
+```bash
+php artisan serve
+```
+
+
 
 
