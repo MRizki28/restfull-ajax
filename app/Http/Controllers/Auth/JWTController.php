@@ -8,17 +8,22 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class JWTController extends Controller
 {
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', ['except' => ['login','index', 'register']]);
+    
+    // }
+    
+    public function index()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        return view('login');
     }
 
-
-
-    public function register (Request $request)
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
@@ -31,7 +36,7 @@ class JWTController extends Controller
             return response()->json([
                 'message' => 'Validation Error',
                 'errors' => $validator->errors()
-            ],Response::HTTP_NOT_ACCEPTABLE);
+            ], Response::HTTP_NOT_ACCEPTABLE);
         }
 
         $user = User::create([
@@ -44,13 +49,13 @@ class JWTController extends Controller
         return response()->json([
             'message' => 'Success register',
             'data' => $user
-        ],Response::HTTP_OK);
+        ], Response::HTTP_OK);
     }
 
 
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ]);
@@ -59,16 +64,21 @@ class JWTController extends Controller
             return response()->json([
                 'message' => 'Periksa kembali validasi login',
                 'errors' => $validator->errors()
-            ],422);
+            ], 422);
         }
 
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json([
                 'error' => 'Failed Login'
-            ],401);
+            ], 401);
         }
-
+        
+    
         return $this->respondWithToken($token);
+
+      
+        // return redirect('/home');
+
     }
 
     public function refresh()
@@ -77,7 +87,7 @@ class JWTController extends Controller
     }
 
 
-    protected function respondWithToken($token )
+    protected function respondWithToken($token)
     {
         return response()->json([
             'user' => auth()->user()->nama,

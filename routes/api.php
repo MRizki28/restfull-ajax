@@ -15,21 +15,38 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/jwt',[JWTController::class, 'index']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::group(['Middleware'=> 'api'], function($router){
-    Route::post('/register', [JWTController::class, 'register']);
-    Route::post('/login', [JWTController::class, 'login']);
-    Route::post('/refresh', [JWTController::class, 'refresh']);
+
+// Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
+// //API route for login user
+// Route::post('/login', [App\Http\Controllers\Auth\AuthController::class, 'login']);
+
+
+// Route::get('/jwt', [JWTController::class, 'index']);
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     Route::get('/profile', function(Request $request) {
+//         return auth()->user();
+//     });
+   
+
+//     // API route for logout user
+//     Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout']);
+// });
+
+Route::post('/refresh', [JWTController::class, 'refresh']);
+Route::post('/login', [JWTController::class, 'login']);
+Route::post('/register', [JWTController::class, 'register']);
+
+Route::middleware(['auth:sanctum'])->group(function ($router) {
+
+    Route::get('/barang', [BarangController::class, 'index']);
+    Route::post('/barang', [BarangController::class, 'store']);
+    Route::put('/barang/edit/{id}', [BarangController::class, 'update']);
+    Route::get('/barang/{id}', [BarangController::class, 'show']);
+
+
 
 });
 
 
 
-Route::get('/barang', [BarangController::class, 'index']);
-Route::post('/barang', [BarangController::class, 'store']);
-Route::put('/barang/edit/{id}', [BarangController::class, 'update']);
-Route::get('/barang/{id}' , [BarangController::class, 'show']);
 
