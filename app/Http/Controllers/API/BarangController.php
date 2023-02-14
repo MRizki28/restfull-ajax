@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\BarangModel;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,18 @@ use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
+
+
+    public function index2()
+    {
+        return view('welcome');
+    }
+
     public function index()
     {
         $barang = BarangModel::all();
